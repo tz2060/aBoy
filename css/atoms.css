@@ -1,0 +1,123 @@
+/* ==========================================================================
+   atoms.css —— 只做一件事：定义可复用的小控件（按钮 / 标签 / 徽章 / 卡片 / 图标按钮）
+   ========================================================================== */
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--ds-radius-pill);
+  border: 1px solid transparent;
+  transition: transform var(--ds-duration) var(--ds-ease),
+    background-color var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease),
+    box-shadow var(--ds-duration) var(--ds-ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn--primary {
+  background: linear-gradient(120deg, var(--ds-blue), var(--ds-blue-strong));
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(77, 107, 254, 0.32);
+}
+
+.btn--primary:hover {
+  color: #ffffff;
+  box-shadow: 0 16px 32px rgba(77, 107, 254, 0.42);
+}
+
+.btn--ghost {
+  background: var(--ds-surface);
+  border-color: var(--ds-border-strong);
+  color: var(--ds-text);
+}
+
+.btn--ghost:hover {
+  background: var(--ds-surface-hover);
+  border-color: var(--ds-blue-line);
+}
+
+.btn__arrow {
+  transition: transform var(--ds-duration) var(--ds-ease);
+}
+
+.btn:hover .btn__arrow {
+  transform: translateX(4px);
+}
+
+/* ---------- 标签 ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  color: var(--ds-text-soft);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  white-space: nowrap;
+}
+
+.chip--brand {
+  color: var(--ds-blue-light);
+  border-color: var(--ds-blue-line);
+  background: var(--ds-blue-soft);
+}
+
+/* ---------- 徽章（首屏小胶囊） ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  color: var(--ds-text-soft);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  backdrop-filter: blur(10px);
+}
+
+.badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ds-blue);
+  box-shadow: 0 0 0 4px var(--ds-blue-soft);
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  padding: 28px;
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  box-shadow: var(--ds-shadow-soft);
+}
+
+/* ---------- 品牌标识（页头与页脚共用） ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: 1.05rem;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-blue-soft);
+  border: 1px solid var(--ds-blue-line);
+}

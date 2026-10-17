@@ -1,0 +1,69 @@
+/* ==========================================================================
+   projects.css —— 只做一件事：定义「作品」区块的样式
+   ========================================================================== */
+
+.projects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.project {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease),
+    box-shadow var(--ds-duration) var(--ds-ease);
+}
+
+.project:hover {
+  transform: translateY(-6px);
+  border-color: var(--ds-blue-line);
+  box-shadow: var(--ds-shadow);
+}
+
+.project__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  font-size: 1.35rem;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-blue-soft);
+  border: 1px solid var(--ds-blue-line);
+}
+
+.project__title {
+  font-size: 1.1rem;
+}
+
+.project__desc {
+  flex: 1;
+  font-size: 0.925rem;
+}
+
+.project__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ds-blue-light);
+}
+
+.project__link span {
+  transition: transform var(--ds-duration) var(--ds-ease);
+}
+
+.project__link:hover span {
+  transform: translate(3px, -3px);
+}

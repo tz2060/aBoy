@@ -1,0 +1,33 @@
+/* ==========================================================================
+   particle-layer.css —— 只做一件事：定义固定粒子背景层的定位与画布表现
+   ========================================================================== */
+
+/* 固定在视口上：页面滚动时它不动，始终作为背景 */
+.particle-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;           /* 压在页面内容之下、背景氛围光之上 */
+  pointer-events: none; /* 不挡任何鼠标操作；鼠标位置由 window 事件统一跟踪 */
+  overflow: hidden;     /* 柔光超出视口时裁掉，避免出现滚动条 */
+  opacity: 0.85;
+}
+
+/* 点云背后的柔光，位置与 camera 的 anchorX 对应（页面宽度的 2/3） */
+.particle-layer::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 66.67%;
+  width: 62vmin;
+  height: 62vmin;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--ds-blue-soft), transparent 70%);
+  filter: blur(22px);
+}
+
+.particle-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

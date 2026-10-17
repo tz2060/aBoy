@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>田壮壮 · 个人主页</title>
+  <meta name="description" content="DeepSeek 风格的个人主页：纯手写 HTML / CSS / JavaScript，每个模块只做一件事。" />
+  <meta name="theme-color" content="#060b1a" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐋</text></svg>" />
+
+  <!-- 样式模块：每层只负责一个方面，顺序 = 从抽象到具体 -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/atoms.css" />
+  <link rel="stylesheet" href="css/effects.css" />
+  <link rel="stylesheet" href="css/particle-layer.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/hero.css" />
+  <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="css/skills.css" />
+  <link rel="stylesheet" href="css/projects.css" />
+  <link rel="stylesheet" href="css/contact.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <!-- 粒子背景层挂载点：固定在视口上，不随页面滚动（内容由 particle-scene.js 渲染） -->
+  <div id="particle-layer" class="particle-layer" aria-hidden="true"></div>
+
+  <!-- 挂载点：每个区块的内容由 js/modules 下同名的模块渲染 -->
+
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main">
+    <section id="hero" class="section section--hero">
+      <p class="section__loading">正在加载「首屏」…</p>
+    </section>
+
+    <section id="about" class="section">
+      <p class="section__loading">正在加载「关于我」…</p>
+    </section>
+
+    <section id="skills" class="section">
+      <p class="section__loading">正在加载「技能」…</p>
+    </section>
+
+    <section id="projects" class="section">
+      <p class="section__loading">正在加载「作品」…</p>
+    </section>
+
+    <section id="contact" class="section">
+      <p class="section__loading">正在加载「联系」…</p>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="site-footer">
+    <p class="section__loading">正在加载「页脚」…</p>
+  </footer>
+
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="回到顶部" hidden>↑</button>
+
+  <noscript>
+    <p class="section__loading">本站内容由 JavaScript 模块渲染，请开启 JavaScript 后刷新。</p>
+  </noscript>
+
+  <!-- 内联模块：命名空间 —— 只做一件事：声明各模块共享的全局命名空间 -->
+  <script>window.App = { data: {}, effects: {}, particles: {} };</script>
+
+  <!-- 核心层：基础设施，各自只提供一个能力 -->
+  <script src="js/core/registry.js"></script>
+  <script src="js/core/el.js"></script>
+  <script src="js/core/select.js"></script>
+
+  <!-- 效果层：可被任意模块复用的动画能力 -->
+  <script src="js/effects/typewriter.js"></script>
+  <script src="js/effects/count-up.js"></script>
+
+  <!-- 数据层：只提供内容 -->
+  <script src="js/data/profile.js"></script>
+  <script src="js/data/particles.js"></script>
+
+  <!-- 粒子层：每个文件只提供一个能力，由 particle-scene.js 负责装配 -->
+  <script src="js/particles/geometry.js"></script>
+  <script src="js/particles/palette.js"></script>
+  <script src="js/particles/camera.js"></script>
+  <script src="js/particles/pointer.js"></script>
+  <script src="js/particles/disturbance.js"></script>
+  <script src="js/particles/painter.js"></script>
+  <script src="js/particles/canvas-sizer.js"></script>
+  <script src="js/particles/animation-loop.js"></script>
+
+  <!-- 渲染模块：各自只渲染一个区块（按注册顺序执行） -->
+  <script src="js/modules/site-header.js"></script>
+  <script src="js/modules/hero.js"></script>
+  <script src="js/modules/particle-scene.js"></script>
+  <script src="js/modules/about.js"></script>
+  <script src="js/modules/skills.js"></script>
+  <script src="js/modules/projects.js"></script>
+  <script src="js/modules/contact.js"></script>
+  <script src="js/modules/site-footer.js"></script>
+
+  <!-- 交互模块：各自只负责一种交互 -->
+  <script src="js/modules/reveal.js"></script>
+  <script src="js/modules/scroll-spy.js"></script>
+  <script src="js/modules/back-to-top.js"></script>
+  <script src="js/modules/copy-text.js"></script>
+
+  <!-- 启动器：只负责按注册顺序装配所有模块 -->
+  <script src="js/main.js"></script>
+</body>
+</html>

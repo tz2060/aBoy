@@ -1,0 +1,11 @@
+# ---- 系统 / 编辑器 ----
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# ---- 临时调试脚本（_xxx.js / _xxx.py）----
+tools/_*.js
+tools/_*.py

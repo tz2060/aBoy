@@ -1,0 +1,54 @@
+/* ==========================================================================
+   tokens.css —— 只做一件事：集中定义全站可复用的设计变量（颜色 / 尺寸 / 动效）
+   ========================================================================== */
+
+:root {
+  /* 品牌色：DeepSeek 蓝 */
+  --ds-blue: #4d6bfe;
+  --ds-blue-strong: #3854e0;
+  --ds-blue-light: #8aa2ff;
+  --ds-blue-soft: rgba(77, 107, 254, 0.14);
+  --ds-blue-line: rgba(77, 107, 254, 0.34);
+
+  /* 版式尺度 */
+  --ds-max-width: 1120px;
+  --ds-gutter: 24px;
+  --ds-header-height: 64px;
+  --ds-section-y: 104px;
+
+  /* 圆角 */
+  --ds-radius-xs: 8px;
+  --ds-radius-sm: 12px;
+  --ds-radius: 18px;
+  --ds-radius-lg: 26px;
+  --ds-radius-pill: 999px;
+
+  /* 字体 */
+  --ds-font-sans: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ds-font-mono: "JetBrains Mono", "Cascadia Code", Consolas, "Courier New", monospace;
+
+  /* 动效 */
+  --ds-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ds-duration: 0.28s;
+
+  /* 层级 */
+  --ds-z-header: 100;
+  --ds-z-totop: 90;
+
+  /* 配色（全站只有暗色主题） */
+  color-scheme: dark;
+  --ds-bg: #060b1a;
+  --ds-bg-soft: #0a1226;
+  --ds-surface: rgba(255, 255, 255, 0.045);
+  --ds-surface-hover: rgba(255, 255, 255, 0.08);
+  --ds-border: rgba(255, 255, 255, 0.10);
+  --ds-border-strong: rgba(255, 255, 255, 0.18);
+  --ds-text: #eaf0ff;
+  --ds-text-soft: #a7b3d4;
+  --ds-text-dim: #6f7ca0;
+  --ds-header-bg: rgba(6, 11, 26, 0.72);
+  --ds-glow-a: rgba(77, 107, 254, 0.42);
+  --ds-glow-b: rgba(124, 92, 255, 0.30);
+  --ds-shadow: 0 18px 40px rgba(3, 7, 20, 0.50);
+  --ds-shadow-soft: 0 8px 24px rgba(3, 7, 20, 0.35);
+}

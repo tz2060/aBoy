@@ -1,0 +1,78 @@
+/* ==========================================================================
+   skills.css —— 只做一件事：定义「技能」区块的样式（含进度条动画的触发条件）
+   ========================================================================== */
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.skills__group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 1.05rem;
+}
+
+.skills__group-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-blue-soft);
+  border: 1px solid var(--ds-blue-line);
+}
+
+.skills__list {
+  display: grid;
+  gap: 18px;
+}
+
+.skill__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.skill__name {
+  color: var(--ds-text);
+  font-weight: 500;
+}
+
+.skill__value {
+  color: var(--ds-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.skill__bar {
+  height: 6px;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-surface-hover);
+  overflow: hidden;
+}
+
+.skill__fill {
+  display: block;
+  width: var(--value, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--ds-blue), var(--ds-blue-light));
+  transition: width 1.1s var(--ds-ease);
+}
+
+/* 进度条只在所属分组进入视口后才展开 */
+.js-reveal [data-reveal] .skill__fill {
+  width: 0;
+}
+
+.js-reveal [data-reveal].is-visible .skill__fill {
+  width: var(--value, 0%);
+}

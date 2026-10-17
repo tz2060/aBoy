@@ -1,0 +1,75 @@
+/* ==========================================================================
+   contact.css —— 只做一件事：定义「联系」区块的样式
+   ========================================================================== */
+
+.contact {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 36px;
+  background: linear-gradient(160deg, var(--ds-blue-soft), transparent 70%), var(--ds-surface);
+}
+
+.contact__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.contact__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  transition: border-color var(--ds-duration) var(--ds-ease), transform var(--ds-duration) var(--ds-ease);
+}
+
+.contact__item:hover {
+  transform: translateY(-3px);
+  border-color: var(--ds-blue-line);
+}
+
+.contact__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  font-size: 1.05rem;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-blue-soft);
+  flex-shrink: 0;
+}
+
+.contact__body {
+  display: grid;
+  min-width: 0;
+}
+
+.contact__label {
+  font-size: 0.78rem;
+  color: var(--ds-text-dim);
+}
+
+.contact__value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ds-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.contact__value:hover {
+  color: var(--ds-blue-light);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 32px;
+}

@@ -1,0 +1,98 @@
+/* ==========================================================================
+   responsive.css —— 只做一件事：按屏幕宽度覆盖上面各模块的布局
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  :root {
+    --ds-section-y: 84px;
+  }
+
+  /* 窄屏时粒子更容易和文字重叠，降低存在感 */
+  .particle-layer {
+    opacity: 0.3;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --ds-gutter: 18px;
+    --ds-section-y: 64px;
+  }
+
+  .section__head {
+    margin-bottom: 36px;
+  }
+
+  .brand__badge {
+    display: none;
+  }
+
+  /* 导航改为可横向滚动，避免引入额外的菜单交互 */
+  .nav {
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav__link {
+    padding: 8px 10px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .section--hero {
+    min-height: auto;
+    padding-top: calc(var(--ds-header-height) + 64px);
+  }
+
+  /* 手机上关掉背景粒子：省电，也让文字更清爽 */
+  .particle-layer {
+    display: none;
+  }
+
+  .hero__actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 44px;
+  }
+
+  .skills,
+  .projects,
+  .contact__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .contact {
+    padding: 24px 20px;
+  }
+
+  .back-to-top {
+    right: 18px;
+    bottom: 18px;
+  }
+}

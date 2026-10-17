@@ -1,0 +1,46 @@
+/* ==========================================================================
+   footer.css —— 只做一件事：定义页脚的样式
+   ========================================================================== */
+
+.site-footer {
+  position: relative;
+  z-index: 1; /* 压在固定粒子背景层之上 */
+  border-top: 1px solid var(--ds-border);
+  background: var(--ds-bg-soft);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 32px;
+}
+
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.footer__meta {
+  font-size: 0.85rem;
+  color: var(--ds-text-dim);
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 0.875rem;
+}
+
+.footer__links a {
+  color: var(--ds-text-soft);
+}
+
+.footer__links a:hover {
+  color: var(--ds-blue-light);
+}
