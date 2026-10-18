@@ -29,7 +29,7 @@
           return el('li', { class: 'skill' }, [
             el('div', { class: 'skill__head' }, [
               el('span', { class: 'skill__name', text: item.name }),
-              el('span', { class: 'skill__value', text: item.level + '%' })
+              el('span', { class: 'skill__value', text: item.label || (item.level + '%') })
             ]),
             el('div', {
               class: 'skill__bar',
@@ -37,7 +37,8 @@
               'aria-label': item.name,
               'aria-valuenow': item.level,
               'aria-valuemin': 0,
-              'aria-valuemax': 100
+              'aria-valuemax': 100,
+              'aria-valuetext': item.label || (item.level + '%')
             }, [
               el('span', { class: 'skill__fill', style: '--value: ' + item.level + '%' })
             ])
