@@ -62,48 +62,45 @@
 
     /* 技能：level 为进度条百分比 */
     skills: {
-      eyebrow: '技能',
-      title: '我常用的技术栈',
-      subtitle: '不追求罗列，只保留真正在生产环境里反复使用、能独立负责的部分。',
+      eyebrow: '可以明确实行的有结果的一些想法',
+      title: '计划',
+      subtitle: '有很多想做的事情，但是有明确目标的，有可验收的成果的想法才是值得全力以赴去努力的目标。',
       groups: [
         {
-          icon: '🎨',
-          name: '前端开发',
+          icon: '🏃‍♂️',
+          name: '运动',
           items: [
-            { name: 'HTML / CSS', level: 95 },
-            { name: 'JavaScript / TypeScript', level: 92 },
-            { name: 'Vue 3', level: 90 },
-            { name: 'React', level: 82 }
-          ]
-        },
-        {
-          icon: '⚙️',
-          name: '工程化与后端',
-          items: [
-            { name: 'Vite / Webpack', level: 86 },
-            { name: 'Node.js', level: 80 },
-            { name: '自动化测试', level: 74 },
-            { name: 'CI / CD', level: 72 }
+            { name: '每天五公里，至少40天', level: 0 },
+            { name: '每天散步一小时，用来发呆', level: 0 },
+
           ]
         },
         {
           icon: '🧠',
-          name: 'AI 应用',
+          name: '认知神经科学',
           items: [
-            { name: 'LLM 提示与编排', level: 84 },
-            { name: 'RAG 检索增强', level: 76 },
-            { name: '流式对话界面', level: 88 },
-            { name: '数据可视化', level: 70 }
+            { name: '《认知神经科学·关于生物的心智学》', level: 99,label: '已读完'},
+            { name: '《生物心理学》', level: 900/12,label: '刚读到第九章' },
+            { name: '这一年读过哪些书', level: 999,label: '人性的弱点/优点，梦的解析，这才是心理学，大脑的故事' },
           ]
         },
         {
-          icon: '🤝',
-          name: '协作与表达',
+          icon: '🖥️',
+          name: '计算机科学',
           items: [
-            { name: '技术方案设计', level: 85 },
-            { name: '代码评审', level: 88 },
-            { name: '文档写作', level: 86 },
-            { name: '跨职能沟通', level: 82 }
+            { name: '软件工程·《生成式软件工程》', level: 10,label: '刚开始听课，认知到软件工程是一门怎么样的学科，学习怎么去做一个项目' },
+            { name: '操作系统·《人工智能时代下的操作系统》', level: 5,label: '在人工智能时代的操作系统应该是怎么样的' },
+            { name: '数据库与数据结构', level: 1,label: '怎么去设计一个自己的数据库系统？github？' },
+          ]
+        },
+        {
+          icon: '🤖',
+          name: 'LLM',
+          items: [
+            { name: 'minimind', level: 50,label: '学习如何去做一个自己的大语言模型' },
+            { name: 'transformer', level: 1,label: '学习Transformer架构' },
+            { name: 'PyTorch 工程实践', level: 1,label: '学习PyTorch在实际项目中的应用' },
+            { name: '推理部署', level: 1,label: '学习大语言模型在超大计算集群的推理和部署' }
           ]
         }
       ]
@@ -111,32 +108,24 @@
 
     /* 作品 */
     projects: {
-      eyebrow: '作品',
-      title: '最近在做的一些东西',
-      subtitle: '每一个都解决一个具体问题：要么省时间，要么少出错。',
+      eyebrow: '项目',
+      title: '计划要做的一些东西',
+      subtitle: '每一个都解决一个具体问题，或者是一个有趣的想法。每一个都可以落地，或者是一个可交付的成果。',
       items: [
         {
-          icon: '🧩',
-          title: '组件库 Lumen UI',
-          desc: '一套面向中后台的组件库，40+ 组件，配套主题变量与无障碍规范，已在三个业务线复用。',
-          tags: ['Vue 3', 'TypeScript', 'Vite'],
-          link: 'https://github.com/',
-          linkLabel: '查看源码'
-        },
-        {
           icon: '💬',
-          title: 'DeepChat 对话面板',
-          desc: '流式输出的 AI 对话界面：支持 Markdown、代码高亮、会话持久化与中断重试，首屏 1.2s 内可交互。',
-          tags: ['流式渲染', 'SSE', '性能优化'],
+          title: 'Chat 对话面板',
+          desc: '一个本地优先、数据自主的多模态 AI 对话工作台：接云端 API 或本地模型，支持图片/文件/文本对话，所有会话以 Markdown 可携带格式保存。',
+          tags: ['Tauri', 'React', 'TypeScript', 'SQLite', 'Ollama', 'OpenAI API'],
           link: 'https://github.com/',
           linkLabel: '查看项目'
         },
         {
-          icon: '📚',
-          title: '知识库问答助手',
-          desc: '把团队文档接入检索增强问答，回答自带引用来源，新同事上手时间从两周缩短到三天。',
-          tags: ['RAG', 'Node.js', '向量检索'],
-          link: 'https://github.com/',
+          icon: '🗂️',
+          title: '知识库个人助手',
+          desc: '实现一个持续为你工作的个人助手，基于向量检索技术，能够快速从你的知识库中找到相关信息，并提供智能化的回答。',
+          tags: ['Agent', '个人数据库', '手机端联动', '共享上下文'],
+          link: 'https://jyywiki.cn/GSE/2026/lab1.md',
           linkLabel: '了解方案'
         }
       ]
@@ -144,14 +133,13 @@
 
     /* 联系方式：href 为空时渲染成纯文本 */
     contact: {
-      eyebrow: '联系',
+      eyebrow: '微信邮箱和仓库',
       title: '有想法？随时聊聊',
       subtitle: '无论是工作机会、技术合作，还是单纯想讨论一个产品点子，都欢迎给我发消息。',
       items: [
-        { icon: '✉️', label: '邮箱', value: 'hello@linzhiyuan.dev', href: 'mailto:hello@linzhiyuan.dev' },
-        { icon: '🐙', label: 'GitHub', value: 'github.com/linzhiyuan', href: 'https://github.com/' },
-        { icon: '💬', label: '微信', value: 'linzhiyuan_dev', href: '' },
-        { icon: '📝', label: '博客', value: 'blog.linzhiyuan.dev', href: 'https://example.com/' }
+        { icon: '📫', label: '邮箱', value: 'hello@linzhiyuan.dev', href: 'mailto:hello@linzhiyuan.dev' },
+        { icon: '📦', label: 'GitHub', value: 'github.com/linzhiyuan', href: 'https://github.com/' },
+        { icon: '🌏', label: '微信', value: 'linzhiyuan_dev', href: '' },
       ],
       copyLabel: '复制邮箱',
       mailLabel: '写一封邮件'
