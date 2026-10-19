@@ -17,8 +17,18 @@
       el('p', { class: 'section__subtitle', text: about.subtitle })
     ]);
 
+    /* 头像和品牌图标同一套规则：值里含 / 或 . 就当作图片路径，否则按 emoji 渲染 */
+    var avatarSource = about.avatar || '';
+    var avatarIsImage = /[\/.]/.test(avatarSource);
+
+    var avatar = avatarIsImage
+      ? el('div', { class: 'about__avatar about__avatar--image', 'aria-hidden': 'true' }, [
+        el('img', { src: avatarSource, alt: '' })
+      ])
+      : el('div', { class: 'about__avatar', text: avatarSource, 'aria-hidden': 'true' });
+
     var profileCard = el('div', { class: 'about__card card', 'data-reveal': true }, [
-      el('div', { class: 'about__avatar', text: about.avatar, 'aria-hidden': 'true' }),
+      avatar,
       el('p', { class: 'about__name', text: App.data.profile.name }),
       el('p', { class: 'about__role', text: App.data.profile.role }),
       el('ul', { class: 'about__facts' }, about.facts.map(function (fact) {

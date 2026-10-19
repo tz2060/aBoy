@@ -146,13 +146,16 @@ if (!profile) {
     needString(profile[key], 'profile.' + key);
   });
 
-  /* 品牌图标：填了图片路径就确认文件真的在 */
-  if (profile.logo && /[\/.]/.test(profile.logo) && !/^(https?:|data:)/.test(profile.logo)) {
+  /* 图标 / 头像：填了本地图片路径就确认文件真的在 */
+  function needLocalFile(value, label) {
+    if (!value || /^(https?:|data:)/.test(value) || !/[\/.]/.test(value)) return;
     fields += 1;
-    if (!fs.existsSync(path.join(ROOT, profile.logo))) {
-      problems.push('profile.logo 指向的文件不存在：' + profile.logo);
+    if (!fs.existsSync(path.join(ROOT, value))) {
+      problems.push(label + ' 指向的文件不存在：' + value);
     }
   }
+
+  needLocalFile(profile.logo, 'profile.logo');
 
   needArray(profile.typewriterLines, 'profile.typewriterLines');
 
@@ -179,6 +182,7 @@ if (!profile) {
     });
     needArray(about.paragraphs, 'profile.about.paragraphs');
     needArray(about.tags, 'profile.about.tags');
+    needLocalFile(about.avatar, 'profile.about.avatar');
   }
 
   var skills = profile.skills;
