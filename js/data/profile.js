@@ -137,9 +137,9 @@
       title: '有想法？随时聊聊',
       subtitle: '无论是工作机会、技术合作，还是单纯想讨论一个产品点子，都欢迎给我发消息。',
       items: [
-        { icon: '📫', label: '邮箱', value: 'hello@linzhiyuan.dev', href: 'mailto:hello@linzhiyuan.dev' },
-        { icon: '📦', label: 'GitHub', value: 'github.com/linzhiyuan', href: 'https://github.com/' },
-        { icon: '🌏', label: '微信', value: 'linzhiyuan_dev', href: '' },
+        { icon: '📫', label: '邮箱', value: '2060362032@qq.com', href: '2060362032@qq.com' },
+        { icon: '📦', label: 'GitHub', value: 'https://tz2060.github.io/CODE/', href: 'https://github.com/' },
+        { icon: '🌏', label: '微信', value: 'tz618033988', href: '' },
       ],
       copyLabel: '复制邮箱',
       mailLabel: '写一封邮件'
@@ -150,8 +150,8 @@
       note: '。',
       links: [
         { label: '回到顶部', href: '#hero' },
-        { label: 'GitHub', href: 'https://github.com/' },
-        { label: '邮箱', href: 'mailto:hello@linzhiyuan.dev' }
+        { label: 'GitHub', href: 'https://tz2060.github.io/CODE/' },
+        { label: '邮箱', href: '2060362032@qq.com' }
       ]
     }
   };

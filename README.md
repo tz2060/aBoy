@@ -1,6 +1,6 @@
-# DeepSeek 风格个人主页
+# aBoy主页
 
-纯原生 HTML / CSS / JavaScript 手写的单页个人主页，**没有构建工具、没有第三方依赖**，双击 `index.html` 即可打开。
+纯原生 HTML / CSS / JavaScript 单页个人主页，**没有构建工具、没有第三方依赖**，双击 `index.html` 即可打开。
 
 设计语言参考 DeepSeek：深蓝底色、品牌蓝 `#4D6BFE` 渐变、鲸鱼标识、圆角玻璃质感卡片、柔和光晕。
 
