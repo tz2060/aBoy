@@ -17,6 +17,7 @@ var vm = require('vm');
 
 var ROOT = path.resolve(__dirname, '..');
 var problems = [];
+var warnings = [];
 var stats = { scripts: 0, assets: 0, classes: 0 };
 
 function read(file) {
@@ -131,12 +132,27 @@ function needArray(value, label) {
   return Array.isArray(value) ? value : [];
 }
 
+/* 允许为空数组：例如把首屏数字整段注释掉是合法用法 */
+function needList(value, label) {
+  fields += 1;
+  if (!Array.isArray(value)) problems.push('数据缺失：' + label + ' 应为数组');
+  return Array.isArray(value) ? value : [];
+}
+
 if (!profile) {
   problems.push('数据缺失：js/data/profile.js 没有导出 App.data.profile');
 } else {
   ['name', 'latin', 'role', 'email', 'badge', 'summary'].forEach(function (key) {
     needString(profile[key], 'profile.' + key);
   });
+
+  /* 品牌图标：填了图片路径就确认文件真的在 */
+  if (profile.logo && /[\/.]/.test(profile.logo) && !/^(https?:|data:)/.test(profile.logo)) {
+    fields += 1;
+    if (!fs.existsSync(path.join(ROOT, profile.logo))) {
+      problems.push('profile.logo 指向的文件不存在：' + profile.logo);
+    }
+  }
 
   needArray(profile.typewriterLines, 'profile.typewriterLines');
 
@@ -148,7 +164,7 @@ if (!profile) {
     }
   });
 
-  needArray(profile.stats, 'profile.stats').forEach(function (item, index) {
+  needList(profile.stats, 'profile.stats').forEach(function (item, index) {
     if (typeof item.value !== 'number') problems.push('数据缺失：profile.stats[' + index + '].value 应为数字');
     needString(item.label, 'profile.stats[' + index + '].label');
   });
@@ -174,8 +190,11 @@ if (!profile) {
       needString(group.name, 'profile.skills.groups[' + groupIndex + '].name');
       needArray(group.items, 'profile.skills.groups[' + groupIndex + '].items').forEach(function (item, index) {
         needString(item.name, 'profile.skills.groups[' + groupIndex + '].items[' + index + '].name');
-        if (typeof item.level !== 'number' || item.level < 0 || item.level > 100) {
-          problems.push('数据非法：技能进度应在 0-100 之间 → ' + item.name);
+        if (typeof item.level !== 'number' || !isFinite(item.level)) {
+          warnings.push('技能进度不是数字，会按 0% 显示：' + item.name);
+        } else if (item.level < 0 || item.level > 100) {
+          warnings.push('技能进度超出 0–100，会按 ' + (item.level > 100 ? 100 : 0) + '% 显示：'
+            + item.name + ' = ' + item.level);
         }
       });
     });
@@ -240,6 +259,11 @@ if (!Array.isArray(particleData) || !particleData.length) {
 /* ---------- 汇总 ---------- */
 console.log('检查脚本 ' + stats.scripts + ' 个，资源引用 ' + stats.assets + ' 处，class ' + stats.classes
   + ' 个，挂载点 ' + mountPoints + ' 个，数据字段 ' + fields + ' 项，粒子 ' + particleCount + ' 个');
+
+if (warnings.length) {
+  console.log('有 ' + warnings.length + ' 条提示（不影响通过）：');
+  warnings.forEach(function (warning) { console.log('  · ' + warning); });
+}
 
 if (problems.length) {
   console.log('发现问题 ' + problems.length + ' 个：');

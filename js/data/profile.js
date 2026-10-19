@@ -8,6 +8,7 @@
 
   var profile = {
     brand: '永远少年',
+    logo: 'assets/logo.png',
     name: '田壮壮',
     latin: 'Tz_Boy',
     role: '计算机科学学生，认知脑科学学生',
@@ -137,7 +138,7 @@
       title: '有想法？随时聊聊',
       subtitle: '无论是工作机会、技术合作，还是单纯想讨论一个产品点子，都欢迎给我发消息。',
       items: [
-        { icon: '📫', label: '邮箱', value: '2060362032@qq.com', href: '2060362032@qq.com' },
+        { icon: '📫', label: '邮箱', value: '2060362032@qq.com', href: 'mailto:2060362032@qq.com' },
         { icon: '📦', label: 'GitHub', value: 'https://tz2060.github.io/CODE/', href: 'https://github.com/' },
         { icon: '🌏', label: '微信', value: 'tz618033988', href: '' },
       ],
@@ -151,7 +152,7 @@
       links: [
         { label: '回到顶部', href: '#hero' },
         { label: 'GitHub', href: 'https://tz2060.github.io/CODE/' },
-        { label: '邮箱', href: '2060362032@qq.com' }
+        { label: '邮箱', href: 'mailto:2060362032@qq.com' }
       ]
     }
   };

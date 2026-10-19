@@ -15,17 +15,7 @@
     var el = App.el;
     var counters = [];
 
-    var stats = el('ul', { class: 'stats' }, profile.stats.map(function (stat) {
-      var valueNode = el('span', { class: 'stat__value', text: '0' });
-      counters.push({ node: valueNode, stat: stat });
-
-      return el('li', { class: 'stat' }, [
-        valueNode,
-        el('span', { class: 'stat__label', text: stat.label })
-      ]);
-    }));
-
-    var content = el('div', { class: 'container hero' }, [
+    var pieces = [
       el('p', { class: 'badge' }, [
         el('span', { class: 'badge__dot', 'aria-hidden': 'true' }),
         el('span', { text: profile.badge })
@@ -45,9 +35,23 @@
           el('span', { class: 'btn__arrow', text: '→', 'aria-hidden': 'true' })
         ]),
         el('a', { class: 'btn btn--ghost', href: '#contact', text: '联系我' })
-      ]),
-      stats
-    ]);
+      ])
+    ];
+
+    /* 数据里没有数字就不渲染这一排，免得首屏底部留一段空白 */
+    if (profile.stats && profile.stats.length) {
+      pieces.push(el('ul', { class: 'stats' }, profile.stats.map(function (stat) {
+        var valueNode = el('span', { class: 'stat__value', text: '0' });
+        counters.push({ node: valueNode, stat: stat });
+
+        return el('li', { class: 'stat' }, [
+          valueNode,
+          el('span', { class: 'stat__label', text: stat.label })
+        ]);
+      })));
+    }
+
+    var content = el('div', { class: 'container hero' }, pieces);
 
     root.innerHTML = '';
     root.appendChild(el('div', { class: 'hero__glow hero__glow--a', 'aria-hidden': 'true' }));

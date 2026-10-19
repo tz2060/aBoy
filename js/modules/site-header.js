@@ -14,7 +14,7 @@
     var el = App.el;
 
     var brand = el('a', { class: 'brand', href: '#hero', 'aria-label': profile.name + ' 的个人主页' }, [
-      el('span', { class: 'brand__logo', text: '🐋', 'aria-hidden': 'true' }),
+      App.createLogo(),
       el('span', { class: 'brand__name', text: profile.name }),
       el('span', { class: 'brand__badge', text: profile.brand })
     ]);

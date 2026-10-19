@@ -13,7 +13,7 @@
     var el = App.el;
 
     var brand = el('div', { class: 'footer__brand' }, [
-      el('span', { class: 'brand__logo', text: '🐋', 'aria-hidden': 'true' }),
+      App.createLogo(),
       el('span', { text: profile.name + ' · ' + profile.latin })
     ]);
 

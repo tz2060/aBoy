@@ -26,21 +26,25 @@
           el('span', { text: group.name })
         ]),
         el('ul', { class: 'skills__list' }, group.items.map(function (item) {
+          /* level 允许写成 900/12 这类表达式，也允许超范围——这里夹到 0–100 再画进度条 */
+          var level = Math.max(0, Math.min(100, Number(item.level) || 0));
+          var valueText = item.label || (level + '%');
+
           return el('li', { class: 'skill' }, [
             el('div', { class: 'skill__head' }, [
               el('span', { class: 'skill__name', text: item.name }),
-              el('span', { class: 'skill__value', text: item.label || (item.level + '%') })
+              el('span', { class: 'skill__value', text: valueText })
             ]),
             el('div', {
               class: 'skill__bar',
               role: 'progressbar',
               'aria-label': item.name,
-              'aria-valuenow': item.level,
+              'aria-valuenow': level,
               'aria-valuemin': 0,
               'aria-valuemax': 100,
-              'aria-valuetext': item.label || (item.level + '%')
+              'aria-valuetext': valueText
             }, [
-              el('span', { class: 'skill__fill', style: '--value: ' + item.level + '%' })
+              el('span', { class: 'skill__fill', style: '--value: ' + level + '%' })
             ])
           ]);
         }))

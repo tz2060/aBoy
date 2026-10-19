@@ -48,6 +48,9 @@
 }
 
 .skill__value {
+  max-width: 62%; /* 进度文字可能是一句备注，限制宽度让它换行而不是挤扁标题 */
+  text-align: right;
+  line-height: 1.5;
   color: var(--ds-text-dim);
   font-variant-numeric: tabular-nums;
 }
