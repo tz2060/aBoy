@@ -52,15 +52,16 @@
   color: transparent;
 }
 
+/* 粒子文字：一行文案由发光点组成，切换时粒子飞向新位置 */
 .hero__typing {
-  min-height: 2em;
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  font-weight: 600;
-  color: var(--ds-text);
+  margin-top: 18px;
+  min-height: clamp(52px, 6.4vw, 78px);
 }
 
-.hero__typing-text {
-  font-family: var(--ds-font-mono);
+.hero__typing-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(52px, 6.4vw, 78px);
 }
 
 .hero__desc {
