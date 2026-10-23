@@ -22,7 +22,10 @@
       ]),
       el('h1', { class: 'hero__title' }, [
         el('span', { text: '你好，我是 ' }),
-        el('span', { class: 'hero__name', text: profile.name })
+        el('span', { class: 'hero__name' }, [
+          el('span', { class: 'hero__name-text', text: profile.name }),
+          el('canvas', { class: 'hero__name-canvas', 'aria-hidden': 'true' })
+        ])
       ]),
       el('p', { class: 'hero__typing' }, [
         el('span', { class: 'hero__typing-text', id: 'hero-typing' }),
@@ -59,6 +62,20 @@
     root.appendChild(content);
 
     App.effects.typewriter(content.querySelector('#hero-typing'), profile.typewriterLines);
+
+    /* 名字：真文字留着排版和读屏，视觉上换成画布里的发光点阵 */
+    var nameText = content.querySelector('.hero__name-text');
+    var nameCanvas = content.querySelector('.hero__name-canvas');
+
+    if (nameText && nameCanvas) {
+      var nameSize = parseFloat(window.getComputedStyle(nameText).fontSize) || 32;
+      App.effects.particleText(nameCanvas, {
+        lines: [profile.name],
+        hold: 0,
+        fontSize: nameSize,
+        parallax: 5
+      });
+    }
 
     counters.forEach(function (item) {
       App.effects.countUp(item.node, item.stat.value, { suffix: item.stat.suffix });

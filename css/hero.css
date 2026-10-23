@@ -45,11 +45,24 @@
   margin: 24px 0 12px;
 }
 
+/* 名字：用画布里的发光点阵代替文字，真文字只负责撑排版和给读屏 */
 .hero__name {
-  background: linear-gradient(120deg, var(--ds-blue-light), var(--ds-blue));
-  -webkit-background-clip: text;
-  background-clip: text;
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
+.hero__name-text {
   color: transparent;
+}
+
+.hero__name-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .hero__typing {

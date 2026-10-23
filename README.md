@@ -25,6 +25,7 @@
 | `js/core/brand-logo.js` | 品牌图标 | 按 `profile.logo` 生成 emoji 或图片图标，页头页脚共用 |
 | `js/core/select.js` | 选择器 | 取不到元素时给出警告并返回 `null` |
 | `js/effects/typewriter.js` | 打字机效果 | 只负责逐字循环输出文案 |
+| `js/effects/particle-text.js` | 粒子文字 | 把文字画成发光点阵（首屏名字用它，`hold: 0` 表示不切换） |
 | `js/effects/count-up.js` | 数字滚动 | 只负责让数字从 0 增长到目标值 |
 | `js/data/profile.js` | 数据 | 全站内容都在这里，**改内容只改这个文件** |
 | `js/data/notes/*.json` | 数据 | 便签源数据，一条一个文件 |
@@ -197,7 +198,7 @@ node tools/self-check.js
 
 它会检查：页面脚本与 `tools/` 下工具脚本的语法能否编译、`index.html` 引用的本地文件是否存在、JS 里用到的 class 有没有对应样式、模块要的挂载点是否存在（静态页面里或由其他模块创建）、`profile.js` 的字段是否齐全且类型正确、`notes.js` 的便签字段是否合法、粒子坐标是否为完整的三元组。
 
-当前结果：脚本 34 个（页面 31 + 工具 3）、资源引用 49 处、class 118 个、挂载点 9 个、数据字段 103 项、粒子 937 个、便签 3 条，**全部通过**（另有 1 条提示：技能进度 999 会按 100% 显示）。
+当前结果：脚本 35 个（页面 32 + 工具 3）、资源引用 50 处、class 120 个、挂载点 9 个、数据字段 103 项、粒子 937 个、便签 3 条，**全部通过**（另有 1 条提示：技能进度 999 会按 100% 显示）。
 
 ## 打开方式
 
@@ -271,5 +272,5 @@ node tools/self-check.js
 
 - 只保留暗色主题：配色全在 `css/tokens.css` 的 `:root` 里，没有切换开关、没有 `localStorage` 记录。
 - 无障碍：跳转链接、`aria-label`、进度条 `role="progressbar"`、`:focus-visible` 焦点环。
-- 动态效果偏好：`prefers-reduced-motion: reduce` 时关闭打字机、数字滚动与入场动画。
+- 动态效果偏好：`prefers-reduced-motion: reduce` 时粒子名字只画一帧、关闭打字机、数字滚动与入场动画。
 - 容错：脚本失效时内容依然可见（隐藏样式依赖 `html.js-reveal`）；单个模块报错不影响其他模块。
