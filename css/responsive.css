@@ -97,21 +97,10 @@
     );
   }
 
-  /* 手机上粒子球就在这行字背后，垫一层很淡的暗色，避免文字和背景点糊在一起 */
+  /* 手机上粒子球就在这行字背后，玻璃底压得更实一点，避免文字和背景点糊在一起 */
   .hero__typing {
-    position: relative;
-  }
-
-  .hero__typing::before {
-    content: "";
-    position: absolute;
-    inset: -10px -14px;
-    background: radial-gradient(120% 130% at 28% 50%, rgba(6, 11, 26, 0.8), rgba(6, 11, 26, 0) 74%);
-    pointer-events: none;
-  }
-
-  .hero__typing-canvas {
-    position: relative;
+    max-width: none;
+    background-color: rgba(6, 11, 26, 0.62);
   }
 
   .stats {

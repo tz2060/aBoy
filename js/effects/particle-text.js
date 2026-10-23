@@ -10,7 +10,7 @@
 
   var PALETTE = ['#9ab0ff', '#6c8bff', '#4d6bfe', '#6fe3ff'];
   var ACCENT = '#eaf2ff';
-  var MAX_PARTICLES = 2200;
+  var MAX_PARTICLES = 3200;
 
   function toRgba(hex, alpha) {
     var value = hex.replace('#', '');
@@ -93,7 +93,7 @@
       painter.fillText(text, 0, height / 2);
 
       var data = painter.getImageData(0, 0, width, height).data;
-      var step = Math.max(3, Math.round(fontSize / 16));
+      var step = Math.max(2, Math.round(fontSize / 20));
       var points = [];
 
       for (var y = 0; y < height; y += step) {

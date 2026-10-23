@@ -52,10 +52,25 @@
   color: transparent;
 }
 
-/* 粒子文字：一行文案由发光点组成，切换时粒子飞向新位置 */
+/* 粒子文字：一行文案由发光点组成，切换时粒子飞向新位置；
+   外面套一层与便签同款的透明玻璃，字和背后的点云不会糊在一起 */
 .hero__typing {
+  position: relative;
+  max-width: 660px;
   margin-top: 18px;
-  min-height: clamp(52px, 6.4vw, 78px);
+  padding: 10px 18px;
+  border-radius: var(--ds-radius-sm);
+  background-color: rgba(6, 11, 26, 0.22);
+  background-image: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.015) 40%,
+    rgba(255, 255, 255, 0.008) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
 .hero__typing-canvas {
