@@ -51,6 +51,7 @@
     var opts = options || {};
     var lines = (opts.lines && opts.lines.length) ? opts.lines.slice() : ['永远少年，永远赤诚！'];
     var hold = opts.hold === undefined ? 3800 : opts.hold;
+    var density = opts.density === undefined ? 1 : opts.density;
     var parallax = opts.parallax || 9;
     var fontFamily = opts.fontFamily
       || '"PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif';
@@ -105,6 +106,14 @@
         }
       }
 
+      /* density < 1 时按斜向网格抽稀：点变少，但笔画还连得住 */
+      if (density < 1) {
+        var keep = Math.max(1, Math.round(1 / density));
+        points = points.filter(function (point) {
+          return (Math.floor(point.x / step) + Math.floor(point.y / step)) % keep === 0;
+        });
+      }
+
       if (points.length > MAX_PARTICLES) {
         var stride = points.length / MAX_PARTICLES;
         var kept = [];
@@ -137,7 +146,7 @@
           color: Math.min(sprites.length - 1, Math.floor((point.x / width) * sprites.length)),
           bright: Math.random() < 0.05,
           /* 点的大小跟着采样步长走，字号变了也是同一套点阵观感 */
-          size: result.step * (1.05 + Math.random() * 0.45)
+          size: Math.min(result.step * (1.9 + Math.random() * 0.5), result.fontSize * 0.14)
         });
       }
 
@@ -161,7 +170,7 @@
         var size = p.size * (0.9 + p.z * 0.3);
         var sprite = p.bright ? accent : sprites[p.color];
 
-        ctx.globalAlpha = Math.min(1, p.alpha) * (0.78 + p.z * 0.22);
+        ctx.globalAlpha = Math.min(1, p.alpha) * (0.82 + p.z * 0.18);
         ctx.drawImage(sprite, px - size / 2, py - size / 2, size, size);
       }
 

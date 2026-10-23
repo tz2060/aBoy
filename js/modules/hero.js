@@ -73,7 +73,9 @@
         lines: [profile.name],
         hold: 0,
         fontSize: nameSize,
-        parallax: 5
+        parallax: 5,
+        /* 手机上字号小，点再稀就认不出字了，留多一点 */
+        density: nameSize < 40 ? 0.5 : 0.34
       });
     }
 
