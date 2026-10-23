@@ -97,12 +97,6 @@
     );
   }
 
-  /* 手机上粒子球就在这行字背后，玻璃底压得更实一点，避免文字和背景点糊在一起 */
-  .hero__typing {
-    max-width: none;
-    background-color: rgba(6, 11, 26, 0.62);
-  }
-
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;

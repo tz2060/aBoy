@@ -25,8 +25,8 @@
         el('span', { class: 'hero__name', text: profile.name })
       ]),
       el('p', { class: 'hero__typing' }, [
-        el('canvas', { class: 'hero__typing-canvas', 'aria-hidden': 'true' }),
-        el('span', { class: 'sr-only', text: profile.typewriterLines.join('；') })
+        el('span', { class: 'hero__typing-text', id: 'hero-typing' }),
+        el('span', { class: 'cursor', 'aria-hidden': 'true' })
       ]),
       el('p', { class: 'hero__desc', text: profile.summary }),
       el('div', { class: 'hero__actions' }, [
@@ -58,9 +58,7 @@
     root.appendChild(el('div', { class: 'hero__glow hero__glow--b', 'aria-hidden': 'true' }));
     root.appendChild(content);
 
-    App.effects.particleText(content.querySelector('.hero__typing-canvas'), {
-      lines: profile.typewriterLines
-    });
+    App.effects.typewriter(content.querySelector('#hero-typing'), profile.typewriterLines);
 
     counters.forEach(function (item) {
       App.effects.countUp(item.node, item.stat.value, { suffix: item.stat.suffix });
