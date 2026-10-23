@@ -260,9 +260,54 @@ if (!Array.isArray(particleData) || !particleData.length) {
   if (invalidParticles) problems.push('粒子坐标里有 ' + invalidParticles + ' 个非数字值');
 }
 
+/* ---------- 7. 便签数据检查：id 唯一、text 非空、time 可解析 ---------- */
+vm.runInContext(read('js/data/notes.js'), sandbox, { filename: 'js/data/notes.js' });
+
+var notesData = sandbox.window.App && sandbox.window.App.data && sandbox.window.App.data.notes;
+var noteCount = 0;
+
+if (!Array.isArray(notesData)) {
+  problems.push('便签数据缺失：js/data/notes.js 没有导出 App.data.notes');
+} else {
+  noteCount = notesData.length;
+  var noteIds = {};
+
+  notesData.forEach(function (item, index) {
+    var label = 'notes[' + index + ']';
+
+    if (!item || typeof item.id !== 'string' || !item.id) {
+      problems.push('便签数据：' + label + '.id 应为非空字符串');
+    } else if (noteIds[item.id]) {
+      problems.push('便签数据：id 重复 → ' + item.id);
+    } else {
+      noteIds[item.id] = true;
+    }
+
+    if (!item || typeof item.text !== 'string' || !item.text) {
+      problems.push('便签数据：' + label + '.text 应为非空字符串');
+    }
+
+    if (!item || (typeof item.time !== 'string' && typeof item.time !== 'number')) {
+      problems.push('便签数据：' + label + '.time 应为 ISO 字符串或毫秒时间戳');
+    } else if (typeof item.time === 'string' && isNaN(Date.parse(item.time))) {
+      problems.push('便签数据：' + label + '.time 不是合法时间 → ' + item.time);
+    }
+
+    if (item && item.html !== undefined && typeof item.html !== 'string') {
+      problems.push('便签数据：' + label + '.html 应为字符串');
+    }
+
+    if (item && item.color !== undefined && item.color !== ''
+      && ['yellow', 'green', 'pink', 'purple', 'blue', 'gray', 'dark'].indexOf(item.color) === -1) {
+      problems.push('便签数据：' + label + '.color 不在可选配色里 → ' + item.color);
+    }
+  });
+}
+
 /* ---------- 汇总 ---------- */
 console.log('检查脚本 ' + stats.scripts + ' 个，资源引用 ' + stats.assets + ' 处，class ' + stats.classes
-  + ' 个，挂载点 ' + mountPoints + ' 个，数据字段 ' + fields + ' 项，粒子 ' + particleCount + ' 个');
+  + ' 个，挂载点 ' + mountPoints + ' 个，数据字段 ' + fields + ' 项，粒子 ' + particleCount + ' 个，便签 '
+  + noteCount + ' 条');
 
 if (warnings.length) {
   console.log('有 ' + warnings.length + ' 条提示（不影响通过）：');

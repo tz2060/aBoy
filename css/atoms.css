@@ -2,46 +2,49 @@
    atoms.css —— 只做一件事：定义可复用的小控件（按钮 / 标签 / 徽章 / 卡片 / 图标按钮）
    ========================================================================== */
 
-/* ---------- 按钮 ---------- */
+/* ---------- 按钮（高透玻璃：无模糊，靠高光与亮边表现材质） ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
-  font-size: 0.95rem;
+  padding: 14px 30px;
+  font-size: 0.906rem;
   font-weight: 600;
   border-radius: var(--ds-radius-pill);
-  border: 1px solid transparent;
+  cursor: pointer;
+  color: var(--ds-text);
+  background: var(--ds-glass-bg);
+  border: 1px solid var(--ds-glass-border);
+  box-shadow: var(--ds-glass-inset);
   transition: transform var(--ds-duration) var(--ds-ease),
-    background-color var(--ds-duration) var(--ds-ease),
     border-color var(--ds-duration) var(--ds-ease),
     box-shadow var(--ds-duration) var(--ds-ease);
 }
 
 .btn:hover {
+  background: var(--ds-glass-bg-hover);
+  border-color: var(--ds-glass-border-hover);
+  box-shadow: var(--ds-glass-inset), var(--ds-glass-shadow);
   transform: translateY(-2px);
 }
 
+/* 主按钮：玻璃底上叠一层半透明蓝，保住「主 CTA」的视觉权重 */
 .btn--primary {
-  background: linear-gradient(120deg, var(--ds-blue), var(--ds-blue-strong));
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.78), rgba(56, 84, 224, 0.72));
+  border-color: rgba(140, 165, 255, 0.35);
+  box-shadow: var(--ds-glass-inset), 0 12px 32px rgba(77, 107, 254, 0.38);
   color: #ffffff;
-  box-shadow: 0 12px 26px rgba(77, 107, 254, 0.32);
 }
 
 .btn--primary:hover {
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.9), rgba(56, 84, 224, 0.84));
+  border-color: rgba(160, 182, 255, 0.5);
+  box-shadow: var(--ds-glass-inset), 0 16px 38px rgba(77, 107, 254, 0.46);
   color: #ffffff;
-  box-shadow: 0 16px 32px rgba(77, 107, 254, 0.42);
 }
 
 .btn--ghost {
-  background: var(--ds-surface);
-  border-color: var(--ds-border-strong);
-  color: var(--ds-text);
-}
-
-.btn--ghost:hover {
-  background: var(--ds-surface-hover);
-  border-color: var(--ds-blue-line);
+  color: #dfe4ff;
 }
 
 .btn__arrow {

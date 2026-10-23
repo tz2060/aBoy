@@ -1,0 +1,615 @@
+/* ==========================================================================
+   notes.css —— 只做一件事：定义首屏便签卡片与便签编辑窗口（高透玻璃）
+   ========================================================================== */
+
+/* 便签配色：只改 --note-tint，卡片 / 条目 / 窗口共用同一组颜色 */
+.note-card,
+.note-window {
+  --note-tint: 255, 255, 255;
+}
+
+.note[data-color="yellow"],
+.note-window[data-color="yellow"] {
+  --note-tint: 242, 211, 94;
+}
+
+.note[data-color="green"],
+.note-window[data-color="green"] {
+  --note-tint: 122, 212, 143;
+}
+
+.note[data-color="pink"],
+.note-window[data-color="pink"] {
+  --note-tint: 243, 161, 189;
+}
+
+.note[data-color="purple"],
+.note-window[data-color="purple"] {
+  --note-tint: 182, 163, 242;
+}
+
+.note[data-color="blue"],
+.note-window[data-color="blue"] {
+  --note-tint: 139, 201, 242;
+}
+
+.note[data-color="gray"],
+.note-window[data-color="gray"] {
+  --note-tint: 200, 204, 212;
+}
+
+.note[data-color="dark"],
+.note-window[data-color="dark"] {
+  --note-tint: 132, 141, 158;
+}
+
+/* ---------- 卡片本体：高透玻璃，不加模糊 ---------- */
+.note-card {
+  position: relative;
+  align-self: flex-start; /* 父级一旦变成 flex column，也不会被拉满整行 */
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 248px;
+  margin-top: 24px;
+  overflow: hidden;
+  border-radius: var(--ds-radius-sm);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.014) 38%,
+    rgba(255, 255, 255, 0.008) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.18);
+  color: #e8ecff;
+  transition: border-color var(--ds-duration) var(--ds-ease),
+    background var(--ds-duration) var(--ds-ease);
+}
+
+.note-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.075) 0%,
+    rgba(255, 255, 255, 0.02) 38%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+}
+
+/* 从便签窗口「便签列表」回来时闪一下，指明位置 */
+.note-card.is-flash {
+  border-color: rgba(140, 165, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 0 0 3px rgba(77, 107, 254, 0.18);
+}
+
+/* ---------- 头部 ---------- */
+.nc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 6px;
+}
+
+.nc-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #e8ecff;
+}
+
+.nc-add {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 15px;
+  line-height: 1;
+  color: #c9d4ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  transition: background-color var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease), color var(--ds-duration) var(--ds-ease);
+}
+
+.nc-add:hover {
+  color: #ffffff;
+  background: rgba(77, 107, 254, 0.45);
+  border-color: rgba(140, 165, 255, 0.45);
+}
+
+/* ---------- 搜索 ---------- */
+.nc-search {
+  margin: 0 12px 8px;
+}
+
+.nc-search__input {
+  width: 100%;
+  height: 26px;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #e8ecff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  outline: none;
+  transition: border-color var(--ds-duration) var(--ds-ease);
+}
+
+.nc-search__input::placeholder {
+  color: rgba(200, 210, 240, 0.4);
+}
+
+.nc-search__input:focus {
+  border-color: rgba(120, 150, 255, 0.42);
+}
+
+/* ---------- 列表 ---------- */
+.nc-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 10px 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+.nc-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nc-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+}
+
+.note {
+  --note-tint: 77, 107, 254;
+  position: relative;
+  padding: 7px 8px 6px;
+  border-radius: 7px;
+  background: rgba(var(--note-tint), 0.09);
+  border: 1px solid rgba(var(--note-tint), 0.16);
+  cursor: pointer;
+  transition: background-color var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease);
+}
+
+.note:hover {
+  background: rgba(var(--note-tint), 0.17);
+  border-color: rgba(var(--note-tint), 0.32);
+}
+
+/* 有配色的便签颜色再明显一点 */
+.note[data-color] {
+  background: rgba(var(--note-tint), 0.12);
+}
+
+.note[data-color]:hover {
+  background: rgba(var(--note-tint), 0.20);
+}
+
+.note__txt {
+  font-size: 11.2px;
+  line-height: 1.55;
+  color: #dbe2ff;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.note__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3px;
+  font-size: 9px;
+  line-height: 1.4;
+  color: rgba(200, 212, 255, 0.45);
+}
+
+.note__time {
+  font-variant-numeric: tabular-nums;
+}
+
+.note__del {
+  font-size: 9px;
+  color: rgba(255, 138, 138, 0.75);
+  opacity: 0;
+  transition: opacity var(--ds-duration) var(--ds-ease);
+}
+
+.note:hover .note__del,
+.note:focus-within .note__del {
+  opacity: 1;
+}
+
+.note__del:hover {
+  color: #ff9b9b;
+}
+
+/* 空态 */
+.nc-empty {
+  padding: 14px 4px;
+  font-size: 10.5px;
+  line-height: 1.6;
+  text-align: center;
+  color: rgba(200, 210, 240, 0.42);
+}
+
+/* ---------- 底部：本机保存 / 导出到仓库 ---------- */
+.nc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 12px 8px;
+  font-size: 9px;
+  line-height: 1.4;
+  color: rgba(200, 210, 240, 0.4);
+}
+
+.nc-export {
+  font-size: 9px;
+  color: rgba(160, 182, 255, 0.72);
+  transition: color var(--ds-duration) var(--ds-ease);
+}
+
+.nc-export:hover {
+  color: #c9d4ff;
+}
+
+/* 窄屏时窗口当弹窗用，垫一层暗色遮罩，避免压住正文串字（桌面端不显示） */
+.note-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 119;
+  background: rgba(3, 7, 20, 0.72);
+  animation: note-window-in 0.16s var(--ds-ease);
+}
+
+/* ==========================================================================
+   便签编辑窗口：固定尺寸、高透玻璃，颜色只作为一层极淡的染色
+   ========================================================================== */
+.note-window {
+  position: fixed;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  height: 300px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
+  border-radius: var(--ds-radius-sm);
+  background: linear-gradient(
+    155deg,
+    rgba(var(--note-tint), 0.13) 0%,
+    rgba(var(--note-tint), 0.05) 42%,
+    rgba(var(--note-tint), 0.03) 100%
+  );
+  border: 1px solid rgba(var(--note-tint), 0.20);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 20px 56px rgba(0, 0, 0, 0.50);
+  color: #e8ecff;
+  animation: note-window-in 0.16s var(--ds-ease);
+}
+
+@keyframes note-window-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 选了配色之后，玻璃上多一层同色染色 */
+.note-window[data-color] {
+  background: linear-gradient(
+    155deg,
+    rgba(var(--note-tint), 0.22) 0%,
+    rgba(var(--note-tint), 0.08) 42%,
+    rgba(var(--note-tint), 0.05) 100%
+  );
+}
+
+/* ---------- 标题栏 ---------- */
+.nw-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  cursor: grab;
+  user-select: none;
+}
+
+.nw-head:active {
+  cursor: grabbing;
+}
+
+.nw-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #e8ecff;
+}
+
+.nw-menu-btn,
+.nw-close {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  line-height: 1;
+  color: rgba(220, 228, 255, 0.66);
+  border-radius: 6px;
+  transition: color var(--ds-duration) var(--ds-ease),
+    background-color var(--ds-duration) var(--ds-ease);
+}
+
+.nw-menu-btn:hover,
+.nw-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 下拉菜单 ---------- */
+.nw-menu {
+  position: absolute;
+  top: 36px;
+  left: 8px;
+  z-index: 2;
+  min-width: 138px;
+  padding: 4px;
+  border-radius: 10px;
+  /* 菜单下面压着正文，必须够实，否则文字会串上来 */
+  background: #0a1022;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 14px 34px rgba(0, 0, 0, 0.48);
+}
+
+.nw-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: #dfe4ff;
+  text-align: left;
+  border-radius: 7px;
+  transition: background-color var(--ds-duration) var(--ds-ease),
+    color var(--ds-duration) var(--ds-ease);
+}
+
+.nw-menu__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nw-menu__item--danger {
+  color: #ff8f8f;
+}
+
+.nw-menu__item--danger:hover {
+  background: rgba(255, 80, 80, 0.14);
+}
+
+/* ---------- 配色条 ---------- */
+.nw-colors {
+  display: flex;
+  gap: 7px;
+  padding: 8px 12px 4px;
+}
+
+.nw-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  opacity: 0.85;
+  transition: opacity var(--ds-duration) var(--ds-ease),
+    transform var(--ds-duration) var(--ds-ease),
+    box-shadow var(--ds-duration) var(--ds-ease);
+}
+
+.nw-swatch:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.nw-swatch.is-active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.42);
+}
+
+.nw-swatch[data-color="yellow"] {
+  background: rgba(242, 211, 94, 0.72);
+}
+
+.nw-swatch[data-color="green"] {
+  background: rgba(122, 212, 143, 0.72);
+}
+
+.nw-swatch[data-color="pink"] {
+  background: rgba(243, 161, 189, 0.72);
+}
+
+.nw-swatch[data-color="purple"] {
+  background: rgba(182, 163, 242, 0.72);
+}
+
+.nw-swatch[data-color="blue"] {
+  background: rgba(139, 201, 242, 0.72);
+}
+
+.nw-swatch[data-color="gray"] {
+  background: rgba(200, 204, 212, 0.72);
+}
+
+.nw-swatch[data-color="dark"] {
+  background: rgba(132, 141, 158, 0.72);
+}
+
+/* ---------- 编辑区 ---------- */
+.nw-area {
+  flex: 1;
+  min-height: 0;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #e8ecff;
+  outline: none;
+  overflow-y: auto;
+  word-break: break-word;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+.nw-area.is-empty::before {
+  content: attr(data-placeholder);
+  color: rgba(200, 210, 240, 0.38);
+  pointer-events: none;
+}
+
+.nw-area::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nw-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+}
+
+.nw-area img {
+  display: block;
+  max-width: 100%;
+  margin: 5px 0;
+  border-radius: 6px;
+}
+
+.nw-area ul,
+.nw-area ol {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+
+.nw-area ul {
+  list-style: disc;
+}
+
+.nw-area ol {
+  list-style: decimal;
+}
+
+/* ---------- 格式工具条 ---------- */
+.nw-tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.nw-tool {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(220, 228, 255, 0.72);
+  border-radius: 6px;
+  transition: color var(--ds-duration) var(--ds-ease),
+    background-color var(--ds-duration) var(--ds-ease);
+}
+
+.nw-tool:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nw-tool.is-active {
+  color: #ffffff;
+  background: rgba(120, 150, 255, 0.30);
+}
+
+.nw-tool--bold {
+  font-weight: 700;
+}
+
+.nw-tool--italic {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.nw-tool--underline {
+  text-decoration: underline;
+}
+
+.nw-tool--strike {
+  text-decoration: line-through;
+}
+
+/* ---------- 底栏 ---------- */
+.nw-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.nw-count {
+  margin-right: auto;
+  font-size: 9px;
+  color: rgba(200, 210, 240, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.nw-btn {
+  padding: 5px 10px;
+  font-size: 10.5px;
+  color: #c9d4ff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  transition: color var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease),
+    background-color var(--ds-duration) var(--ds-ease);
+}
+
+.nw-btn:hover {
+  color: #ffffff;
+  border-color: rgba(140, 165, 255, 0.4);
+}
+
+.nw-btn--save {
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.88), rgba(56, 84, 224, 0.82));
+  border-color: rgba(140, 165, 255, 0.38);
+}
+
+.nw-btn--cancel {
+  color: rgba(200, 210, 240, 0.72);
+}
+
+.nw-btn--save:hover {
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.98), rgba(56, 84, 224, 0.92));
+}

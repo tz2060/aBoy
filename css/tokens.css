@@ -31,6 +31,25 @@
   --ds-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ds-duration: 0.28s;
 
+  /* 高透玻璃：不加模糊，靠极淡的斜向高光 + 1px 亮边表现材质 */
+  --ds-glass-bg: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 42%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  --ds-glass-bg-hover: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.03) 42%,
+    rgba(255, 255, 255, 0.015) 100%
+  );
+  --ds-glass-border: rgba(255, 255, 255, 0.14);
+  --ds-glass-border-hover: rgba(255, 255, 255, 0.26);
+  --ds-glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  --ds-glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
+
   /* 层级 */
   --ds-z-header: 100;
   --ds-z-totop: 90;

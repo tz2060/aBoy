@@ -5,6 +5,7 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+.workbuddy-ai/
 
 # ---- 临时调试脚本（_xxx.js / _xxx.py）----
 tools/_*.js

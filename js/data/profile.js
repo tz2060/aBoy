@@ -25,7 +25,7 @@
 
     /* 顶部导航：href 必须对应页面区块的 id */
     nav: [
-      { label: ' ', href: '#hero' },
+      { label: ' I ', href: '#hero' },
       { label: 'me', href: '#about' },
       { label: '喜欢', href: '#skills' },
       { label: '事', href: '#projects' },
