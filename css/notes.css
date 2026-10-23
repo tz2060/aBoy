@@ -245,16 +245,37 @@
   color: rgba(200, 210, 240, 0.42);
 }
 
-/* ---------- 底部：本机保存 / 导出到仓库 ---------- */
+/* ---------- 底部：保存位置 / 连接文件夹 / 导出 ---------- */
 .nc-foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   padding: 6px 12px 8px;
   font-size: 9px;
   line-height: 1.4;
   color: rgba(200, 210, 240, 0.4);
+}
+
+.nc-status {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nc-link {
+  font-size: 9px;
+  color: rgba(160, 182, 255, 0.72);
+  transition: color var(--ds-duration) var(--ds-ease);
+}
+
+.nc-link:hover {
+  color: #c9d4ff;
+}
+
+.nc-link.is-on {
+  color: rgba(122, 212, 143, 0.85);
 }
 
 .nc-export {

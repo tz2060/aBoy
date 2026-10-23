@@ -27,7 +27,8 @@
 | `js/effects/typewriter.js` | 打字机效果 | 只负责逐字循环输出文案 |
 | `js/effects/count-up.js` | 数字滚动 | 只负责让数字从 0 增长到目标值 |
 | `js/data/profile.js` | 数据 | 全站内容都在这里，**改内容只改这个文件** |
-| `js/data/notes.js` | 数据 | 便签的默认内容（提交到仓库的就是这份数据） |
+| `js/data/notes/*.json` | 数据 | 便签源数据，一条一个文件 |
+| `js/data/notes.js` | 数据 | 由上面那些 json 生成的聚合文件，页面只加载它 |
 | `js/data/particles.js` | 数据 | 首屏粒子点云坐标（由脚本生成，勿手改） |
 | `js/particles/geometry.js` | 粒子 · 几何 | 只负责把扁平坐标整理成居中的点数组 |
 | `js/particles/palette.js` | 粒子 · 上色 | 只负责按高度给每个点分配颜色 |
@@ -53,6 +54,7 @@
 | `js/main.js` | 启动器 | 只负责按注册顺序执行所有模块 |
 | `tools/self-check.js` | 自检脚本 | 只负责静态校验资源是否自洽（开发用，不参与页面运行） |
 | `tools/build-particles.js` | 数据工具 | 只负责把坐标文本转换成粒子数据模块（开发用） |
+| `tools/build-notes.js` | 数据工具 | 只负责把 `js/data/notes/*.json` 合并成 `notes.js`（开发用） |
 
 模块登记顺序 = 脚本引入顺序（见 `index.html` 底部）：先是渲染模块，再是交互模块，因此交互模块总能拿到已经渲染好的 DOM。
 
@@ -67,7 +69,7 @@
 │   ├── core/     # 基础设施（注册表、元素工厂、品牌图标）
 │   ├── effects/  # 可复用的动画能力
 │   ├── particles/ # 粒子云的 8 个单一能力
-│   ├── data/     # 内容数据（含粒子坐标、便签）
+│   ├── data/     # 内容数据（含粒子坐标；便签在 notes/ 下，一条一个文件）
 │   ├── modules/  # 渲染模块 + 交互模块
 │   └── main.js   # 启动器
 └── tools/
@@ -120,20 +122,43 @@ particles.js 坐标
 
 ## 便签（首屏按钮下方）
 
-便签是纯静态页面上能做到的「可提交」方案，数据分两层：
+便签是纯静态页面上能做到的「可提交」方案，**一条便签 = `js/data/notes/` 里的一个 json 文件**：
+
+```
+js/data/
+├── notes/              # 每条便签一个文件，单独提交 / 手改都方便
+│   ├── repo-hello.json
+│   └── repo-export.json
+└── notes.js            # 上面这些文件合并出来的，页面只加载它（自动生成）
+```
 
 | 层 | 位置 | 作用 |
 | --- | --- | --- |
-| 仓库数据 | `js/data/notes.js` | 页面加载时先读这份，部署到 GitHub Pages 后读到的就是仓库里的内容 |
-| 本机改动 | `localStorage`（`aboy:notes:v1`） | 新增 / 修改 / 删除先存这里，立即生效，不联网 |
+| 仓库数据 | `js/data/notes/*.json` | 真正的数据源，一条一个文件 |
+| 聚合文件 | `js/data/notes.js` | 由 `node tools/build-notes.js` 生成，页面加载时读它（`file://` 也能用） |
+| 本机改动 | `localStorage`（`aboy:notes:v1`） | 没连接文件夹时的暂存，立即生效、不联网 |
 
-页面显示的是两者的合并结果（按时间倒序，本机删除的记在 `hidden` 里）；内容和仓库一致的本机副本会被忽略，所以直接改 `js/data/notes.js` 也能生效。
+### 直接保存进项目（推荐）
 
-**把本机的笔记提交到仓库**：
+点卡片底部的「连接」→ 选 **`js/data`** 文件夹 → 浏览器会请求读写权限。之后：
 
-1. 点卡片底部的「导出」，浏览器会下载一个 `notes.js`；
-2. 用它覆盖 `js/data/notes.js`；
-3. `git add js/data/notes.js && git commit && git push`。
+- 保存一条便签 → 写入 `js/data/notes/<id>.json`，同时重写 `js/data/notes.js`；
+- 删除一条 → 删掉对应 json 并重写聚合文件；
+- 连接时会把当前所有便签（含之前存在 localStorage 的）同步成文件，多余的文件一并清掉。
+
+写盘用的是 File System Access API，只有 Chrome / Edge 支持；Safari、Firefox 或没连接时自动退回 localStorage + 「导出」。授权会记在 IndexedDB 里，下次打开页面如果浏览器仍保留权限就直接连上，否则点一下「连接」重新允许即可。
+
+### 不想连文件夹
+
+1. 点「导出」，浏览器下载 `notes.js`；
+2. 覆盖 `js/data/notes.js`（或者把内容拆成 json 放进 `js/data/notes/` 再跑一次构建）；
+3. `git add js/data && git commit && git push`。
+
+改完 json 记得跑一次构建，否则页面读到的还是旧的聚合文件：
+
+```bash
+node tools/build-notes.js
+```
 
 点 `+` 打开便签窗口（固定 320×300，可拖动标题栏移动，`Ctrl/⌘ + Enter` 保存，`Esc` 关闭）；点卡片里的便签是编辑，悬停右侧出现「删除」。
 
@@ -146,21 +171,21 @@ particles.js 坐标
 | 工具条 | 加粗 / 斜体 / 下划线 / 删除线 / 无序列表 / 插入图片（自动等比缩到 640px 再转 data URL） |
 | 底栏 | 字数（500 上限）、保存、取消 |
 
-窄屏（≤ 720px）窗口铺满可用宽度、居中显示，并加一层遮罩压暗页面；窗口本身仍是高透玻璃。
+窄屏（≤ 720px）窗口居中显示并加一层遮罩压暗页面；尺寸始终是 320×300，只有视口装不下时才收缩。
 
-数据结构：
+数据结构（`js/data/notes/*.json`）：
 
-```js
+```json
 {
-  id: 'repo-hello',
-  text: '纯文本，用于列表预览和搜索',
-  html: '带格式的内容，可省略',
-  color: 'yellow',           // 可省略：yellow/green/pink/purple/blue/gray/dark
-  time: '2026-10-24T04:20:00+08:00'
+  "id": "repo-hello",
+  "text": "纯文本，用于列表预览和搜索",
+  "html": "带格式的内容，可省略",
+  "color": "yellow",
+  "time": "2026-10-24T04:20:00+08:00"
 }
 ```
 
-`id` 唯一，`time` 写 ISO 字符串或毫秒时间戳都行；`html` 在写入和渲染时都会按白名单清洗（只留 `b/i/u/s/ul/ol/li/img` 等标签，图片只认 `data:image/`）。`node tools/self-check.js` 会检查 id 唯一、text 非空、time 可解析。
+`id` 唯一，`time` 写 ISO 字符串或毫秒时间戳都行，`color` 可省略；`html` 在写入和渲染时都会按白名单清洗（只留 `b/i/u/s/ul/ol/li/img` 等标签，图片只认 `data:image/`）。`node tools/self-check.js` 会检查 id 唯一、text 非空、time 可解析，并确认聚合文件没有漏掉文件夹里的便签。
 
 ## 自检
 
@@ -172,7 +197,7 @@ node tools/self-check.js
 
 它会检查：页面脚本与 `tools/` 下工具脚本的语法能否编译、`index.html` 引用的本地文件是否存在、JS 里用到的 class 有没有对应样式、模块要的挂载点是否存在（静态页面里或由其他模块创建）、`profile.js` 的字段是否齐全且类型正确、`notes.js` 的便签字段是否合法、粒子坐标是否为完整的三元组。
 
-当前结果：脚本 33 个（页面 31 + 工具 2）、资源引用 49 处、class 116 个、挂载点 9 个、数据字段 103 项、粒子 937 个、便签 2 条，**全部通过**（另有 1 条提示：技能进度 999 会按 100% 显示）。
+当前结果：脚本 34 个（页面 31 + 工具 3）、资源引用 49 处、class 118 个、挂载点 9 个、数据字段 103 项、粒子 937 个、便签 2 条，**全部通过**（另有 1 条提示：技能进度 999 会按 100% 显示）。
 
 ## 打开方式
 

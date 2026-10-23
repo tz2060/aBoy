@@ -71,6 +71,13 @@
     return String(node.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
+  /* 编辑区常留下首尾的 &nbsp; / <br>，存之前去掉 */
+  function trimHtml(html) {
+    return String(html || '')
+      .replace(/^(?:\s|&nbsp;|<br\s*\/?>)+/i, '')
+      .replace(/(?:\s|&nbsp;|<br\s*\/?>)+$/i, '');
+  }
+
   function hasImage(html) {
     return /<img/i.test(html);
   }
@@ -192,7 +199,14 @@
       ]),
       el('ul', { class: 'nc-list' }),
       el('p', { class: 'nc-foot' }, [
-        el('span', { text: '本机保存' }),
+        el('span', { class: 'nc-status', text: '本机保存' }),
+        el('button', {
+          class: 'nc-link',
+          type: 'button',
+          hidden: true,
+          title: '选择 js/data 文件夹，之后保存便签会直接写进项目',
+          text: '连接'
+        }),
         el('button', {
           class: 'nc-export',
           type: 'button',
@@ -388,7 +402,7 @@
   }
 
   function saveNote() {
-    var html = sanitize(els.area.innerHTML);
+    var html = trimHtml(sanitize(els.area.innerHTML));
     var text = plainText(els.area);
 
     if (!text && !hasImage(html)) {
@@ -421,6 +435,12 @@
 
     closeWindow();
     renderList();
+
+    if (dirHandle) {
+      writeNoteFile(entry).then(writeAggregate).then(function () {
+        els.status.textContent = '已写入 js/data';
+      }).catch(handleWriteError);
+    }
   }
 
   function removeNote(id) {
@@ -430,6 +450,10 @@
 
     saveStore();
     renderList();
+
+    if (dirHandle) {
+      removeNoteFile(id).then(writeAggregate).catch(handleWriteError);
+    }
   }
 
   /* ---------- 插入图片：先等比缩到 640px 再转 data URL ---------- */
@@ -462,19 +486,199 @@
     els.file.click();
   }
 
+  /* ---------- 直接写进项目：File System Access ---------- */
+
+  var dirHandle = null;
+  var pendingHandle = null;
+  var FS_DB = 'aboy:notes-fs';
+
+  function openDB() {
+    return new Promise(function (resolve, reject) {
+      var request = indexedDB.open(FS_DB, 1);
+      request.onupgradeneeded = function () {
+        request.result.createObjectStore('handles');
+      };
+      request.onsuccess = function () { resolve(request.result); };
+      request.onerror = function () { reject(request.error); };
+    });
+  }
+
+  function idbGet(key) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var request = db.transaction('handles', 'readonly').objectStore('handles').get(key);
+        request.onsuccess = function () { resolve(request.result || null); };
+        request.onerror = function () { reject(request.error); };
+      });
+    });
+  }
+
+  function idbSet(key, value) {
+    return openDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction('handles', 'readwrite');
+        tx.objectStore('handles').put(value, key);
+        tx.oncomplete = function () { resolve(); };
+        tx.onerror = function () { reject(tx.error); };
+      });
+    });
+  }
+
+  /* 便签 → json 文件内容，字段顺序与 tools/build-notes.js 保持一致 */
+  function toJson(note) {
+    var data = { id: note.id, text: note.text };
+    /* 纯文本就不写 html，文件更干净 */
+    if (note.html && /<[a-z]/i.test(note.html)) data.html = note.html;
+    if (note.color) data.color = note.color;
+    data.time = new Date(note.time).toISOString();
+    return data;
+  }
+
+  function writeText(fileHandle, text) {
+    return fileHandle.createWritable().then(function (writable) {
+      return writable.write(text).then(function () { return writable.close(); });
+    });
+  }
+
+  function notesDir() {
+    return dirHandle.getDirectoryHandle('notes', { create: true });
+  }
+
+  /* js/data/notes.js：页面加载用的聚合文件，每次改动后重写 */
+  function writeAggregate() {
+    if (!dirHandle) return Promise.resolve();
+
+    return dirHandle.getFileHandle('notes.js', { create: true }).then(function (file) {
+      return writeText(file, exportSource());
+    });
+  }
+
+  function writeNoteFile(note) {
+    if (!dirHandle) return Promise.resolve();
+
+    return notesDir()
+      .then(function (dir) { return dir.getFileHandle(note.id + '.json', { create: true }); })
+      .then(function (file) { return writeText(file, JSON.stringify(toJson(note), null, 2) + '\n'); });
+  }
+
+  function removeNoteFile(id) {
+    if (!dirHandle) return Promise.resolve();
+
+    return notesDir().then(function (dir) {
+      return dir.removeEntry(id + '.json');
+    }).catch(function () {
+      /* 文件本来就不存在 */
+    });
+  }
+
+  /* 连接后做一次全量同步：每条一个 json，列表里没有的文件删掉 */
+  function syncFolder() {
+    if (!dirHandle) return Promise.resolve();
+
+    return notesDir().then(function (dir) {
+      var keep = {};
+      var jobs = visibleNotes().map(function (note) {
+        keep[note.id + '.json'] = true;
+        return dir.getFileHandle(note.id + '.json', { create: true }).then(function (file) {
+          return writeText(file, JSON.stringify(toJson(note), null, 2) + '\n');
+        });
+      });
+
+      var iterator = dir.keys();
+
+      function walk() {
+        return iterator.next().then(function (result) {
+          if (result.done) return null;
+          var name = result.value;
+          if (/\.json$/i.test(name) && !keep[name]) {
+            jobs.push(dir.removeEntry(name).catch(function () {}));
+          }
+          return walk();
+        });
+      }
+
+      return walk().then(function () { return Promise.all(jobs); });
+    }).then(writeAggregate);
+  }
+
+  function setConnected(connected) {
+    els.status.textContent = connected ? '写入 js/data' : '本机保存';
+    els.link.textContent = connected ? '已连接' : '连接';
+    els.link.classList.toggle('is-on', connected);
+    els.link.title = connected
+      ? '已连接 js/data，点一下可重新选择文件夹'
+      : '选择 js/data 文件夹，之后保存便签会直接写进项目';
+  }
+
+  function handleWriteError() {
+    dirHandle = null;
+    setConnected(false);
+    els.status.textContent = '写入失败，已存本机';
+  }
+
+  /* 认一下是不是 js/data：里面有 particles.js 或 profile.js 才算 */
+  function isDataFolder(handle) {
+    return handle.getFileHandle('particles.js').then(function () {
+      return true;
+    }, function () {
+      return handle.getFileHandle('profile.js').then(function () {
+        return true;
+      }, function () {
+        return false;
+      });
+    });
+  }
+
+  function useFolder(handle) {
+    isDataFolder(handle).then(function (ok) {
+      if (!ok) {
+        els.status.textContent = '请选 js/data 文件夹';
+        return;
+      }
+
+      dirHandle = handle;
+      pendingHandle = null;
+      setConnected(true);
+
+      idbSet('dir', handle).catch(function () {});
+      syncFolder().catch(handleWriteError);
+    }).catch(handleWriteError);
+  }
+
+  function connectFolder() {
+    if (!window.showDirectoryPicker) return;
+
+    var stored = pendingHandle;
+
+    if (stored) {
+      /* 之前授权过：这次只需要再点一下允许，不用重新挑文件夹 */
+      stored.requestPermission({ mode: 'readwrite' }).then(function (state) {
+        if (state === 'granted') return stored;
+        return window.showDirectoryPicker({ id: 'aboy-notes', mode: 'readwrite' });
+      }).then(useFolder).catch(function () {});
+      return;
+    }
+
+    window.showDirectoryPicker({ id: 'aboy-notes', mode: 'readwrite' })
+      .then(useFolder)
+      .catch(function () { /* 用户取消 */ });
+  }
+
   /* ---------- 导出到仓库 ---------- */
 
   function exportSource() {
     var body = visibleNotes().map(function (note) {
+      /* 和写 json 文件走同一套字段规则，保证两边永远一致 */
+      var data = toJson(note);
       var lines = [
         '    {',
-        '      id: ' + JSON.stringify(note.id) + ',',
-        '      text: ' + JSON.stringify(note.text) + ','
+        '      id: ' + JSON.stringify(data.id) + ',',
+        '      text: ' + JSON.stringify(data.text) + ','
       ];
 
-      if (note.html) lines.push('      html: ' + JSON.stringify(note.html) + ',');
-      if (note.color) lines.push('      color: ' + JSON.stringify(note.color) + ',');
-      lines.push('      time: ' + JSON.stringify(new Date(note.time).toISOString()));
+      if (data.html) lines.push('      html: ' + JSON.stringify(data.html) + ',');
+      if (data.color) lines.push('      color: ' + JSON.stringify(data.color) + ',');
+      lines.push('      time: ' + JSON.stringify(data.time));
       lines.push('    }');
 
       return lines.join('\n');
@@ -484,7 +688,8 @@
       '/**',
       ' * notes.js —— 数据层｜只做一件事：提供便签的默认内容（提交到仓库的就是这份数据）',
       ' *',
-      ' * 由页面上的「导出」生成，直接覆盖本文件即可。',
+      ' * ⚠ 自动生成，别手改：改 js/data/notes/*.json 后运行 node tools/build-notes.js，',
+      ' *   或在页面上点「连接」把 js/data 文件夹接上，保存便签时会自动重写本文件。',
       ' */',
       '(function (global) {',
       "  'use strict';",
@@ -571,6 +776,7 @@
   function bind() {
     els.add.addEventListener('click', function () { openWindow(null); });
     els.export.addEventListener('click', exportNotes);
+    els.link.addEventListener('click', connectFolder);
 
     els.search.addEventListener('input', function () {
       keyword = els.search.value;
@@ -744,6 +950,8 @@
       add: card.querySelector('.nc-add'),
       search: card.querySelector('.nc-search__input'),
       export: card.querySelector('.nc-export'),
+      link: card.querySelector('.nc-link'),
+      status: card.querySelector('.nc-status'),
       scrim: scrim,
       win: win,
       head: win.querySelector('.nw-head'),
@@ -764,6 +972,27 @@
 
     bind();
     renderList();
+
+    /* 支持文件系统 API 时，才显示「连接」；上次授权还在就直接连上 */
+    if (window.showDirectoryPicker) {
+      els.link.hidden = false;
+      setConnected(false);
+
+      idbGet('dir').then(function (handle) {
+        if (!handle || !handle.queryPermission) return null;
+        return handle.queryPermission({ mode: 'readwrite' }).then(function (state) {
+          if (state !== 'granted') {
+            pendingHandle = handle;
+            return null;
+          }
+          return isDataFolder(handle).then(function (ok) {
+            if (!ok) return null;
+            dirHandle = handle;
+            setConnected(true);
+          });
+        });
+      }).catch(function () {});
+    }
   }
 
   App.registry.define('首屏便签', init);

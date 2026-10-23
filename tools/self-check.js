@@ -304,6 +304,47 @@ if (!Array.isArray(notesData)) {
   });
 }
 
+/* ---------- 8. 便签文件夹：每条一个 json，且聚合文件不能漏 ---------- */
+var notesDir = path.join(ROOT, 'js/data/notes');
+
+if (fs.existsSync(notesDir)) {
+  var folderIds = [];
+
+  fs.readdirSync(notesDir).filter(function (name) {
+    return /\.json$/i.test(name);
+  }).forEach(function (name) {
+    var data;
+
+    try {
+      data = JSON.parse(fs.readFileSync(path.join(notesDir, name), 'utf8'));
+    } catch (error) {
+      problems.push('便签文件解析失败：js/data/notes/' + name);
+      return;
+    }
+
+    if (!data || typeof data.id !== 'string' || !data.id) {
+      problems.push('便签文件缺少 id：js/data/notes/' + name);
+      return;
+    }
+    if (typeof data.text !== 'string' || !data.text) {
+      problems.push('便签文件缺少 text：js/data/notes/' + name);
+    }
+    if (typeof data.time !== 'string' || isNaN(Date.parse(data.time))) {
+      problems.push('便签文件的 time 不是合法时间：js/data/notes/' + name);
+    }
+
+    folderIds.push(data.id);
+  });
+
+  var aggregateIds = (notesData || []).map(function (item) { return item.id; });
+
+  folderIds.forEach(function (id) {
+    if (aggregateIds.indexOf(id) === -1) {
+      problems.push('js/data/notes.js 少了这条便签（运行 node tools/build-notes.js）：' + id);
+    }
+  });
+}
+
 /* ---------- 汇总 ---------- */
 console.log('检查脚本 ' + stats.scripts + ' 个，资源引用 ' + stats.assets + ' 处，class ' + stats.classes
   + ' 个，挂载点 ' + mountPoints + ' 个，数据字段 ' + fields + ' 项，粒子 ' + particleCount + ' 个，便签 '
