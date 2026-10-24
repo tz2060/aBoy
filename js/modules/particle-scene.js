@@ -7,14 +7,14 @@
 (function (App) {
   'use strict';
 
-  /* 视角：锚点在页面宽度的 2/3 处；focalFactor 0.75 让点云高度约占页面的 70%（16:9 时） */
+  /* 视角：锚点在页面宽度的 70% 处；focalFactor 0.75 让点云高度约占页面的 70%（16:9 时） */
   var CAMERA = {
     autoRotate: 0.16,
     tilt: -0.22,
     zoom: 1,
     focalFactor: 0.75,
-    anchorX: 2 / 3,
-    anchorY: 0.5
+    anchorX: 0.70,
+    anchorY: 0.49
   };
 
   /* 鼠标扰动：影响半径 / 力度 / 最大位移 */
