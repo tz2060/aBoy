@@ -25,7 +25,7 @@
 | `js/core/brand-logo.js` | 品牌图标 | 按 `profile.logo` 生成 emoji 或图片图标，页头页脚共用 |
 | `js/core/select.js` | 选择器 | 取不到元素时给出警告并返回 `null` |
 | `js/effects/typewriter.js` | 打字机效果 | 只负责逐字循环输出文案 |
-| `js/effects/particle-text.js` | 粒子文字 | 把文字画成发光点阵（首屏名字用它，`hold: 0` 表示不切换） |
+| `js/effects/fireflies.js` | 萤火虫 | 只在字形范围内游走的发光小点（首屏名字用它） |
 | `js/effects/count-up.js` | 数字滚动 | 只负责让数字从 0 增长到目标值 |
 | `js/data/profile.js` | 数据 | 全站内容都在这里，**改内容只改这个文件** |
 | `js/data/notes/*.json` | 数据 | 便签源数据，一条一个文件 |
@@ -272,5 +272,5 @@ node tools/self-check.js
 
 - 只保留暗色主题：配色全在 `css/tokens.css` 的 `:root` 里，没有切换开关、没有 `localStorage` 记录。
 - 无障碍：跳转链接、`aria-label`、进度条 `role="progressbar"`、`:focus-visible` 焦点环。
-- 动态效果偏好：`prefers-reduced-motion: reduce` 时粒子名字只画一帧、关闭打字机、数字滚动与入场动画。
+- 动态效果偏好：`prefers-reduced-motion: reduce` 时名字里的萤火虫只画一帧、关闭打字机、数字滚动与入场动画。
 - 容错：脚本失效时内容依然可见（隐藏样式依赖 `html.js-reveal`）；单个模块报错不影响其他模块。

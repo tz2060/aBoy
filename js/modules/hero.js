@@ -63,19 +63,15 @@
 
     App.effects.typewriter(content.querySelector('#hero-typing'), profile.typewriterLines);
 
-    /* 名字：真文字留着排版和读屏，视觉上换成画布里的发光点阵 */
+    /* 名字：玻璃字 + 字形里游走的萤火虫 */
     var nameText = content.querySelector('.hero__name-text');
     var nameCanvas = content.querySelector('.hero__name-canvas');
 
     if (nameText && nameCanvas) {
-      var nameSize = parseFloat(window.getComputedStyle(nameText).fontSize) || 32;
-      App.effects.particleText(nameCanvas, {
-        lines: [profile.name],
-        hold: 0,
-        fontSize: nameSize,
-        parallax: 5,
-        /* 手机上字号小，点再稀就认不出字了，留多一点 */
-        density: nameSize < 40 ? 0.5 : 0.34
+      App.effects.fireflies(nameCanvas, {
+        text: profile.name,
+        fontSize: parseFloat(window.getComputedStyle(nameText).fontSize) || 32,
+        count: 34
       });
     }
 
